@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Calcuside</title>
+  <style>
+    :root {
+      --accent: #2196f3;
+      --accent-dark: #1565c0;
+      --bg: #f4f7fb;
+      --ok: #43a047;
+      --bad: #e53935;
+      --muted: #666;
+    }
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    header {
+      background: linear-gradient(90deg, var(--accent) 0%, var(--accent-dark) 100%);
+      color: white;
+      padding: 20px 40px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 1px;
+    }
+    header p {
+      margin: 4px 0 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    main {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card {
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      padding: 24px;
+      max-width: 1000px;
+      width: 100%;
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 20px;
+    }
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccd6e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 4px rgba(33, 150, 243, 0.4);
+    }
+    .controls {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background: var(--accent-dark);
+      transform: scale(1.05);
+    }
+    button.secondary {
+      background: white;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+    }
+    .results {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      animation: fadeIn 1s ease-in;
+    }
+    .resultBox {
+      background: linear-gradient(180deg, #ffffff, #f9fbff);
+      border-radius: 12px;
+      box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .resultBox:hover {
+      background: #e3f2fd;
+    }
+    .big {
+      font-size: 20px;
+      font-weight: bold;
+      color: var(--accent-dark);
+    }
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+      animation: fadeIn 1.2s ease-in;
+    }
+    canvas {
+      width: 100%;
+      height: 220px;
+      background: #fff;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>CALCUSIDE</h1>
+    <p>Desarrollado por <strong>PATRICK LUNA</strong> PARA MÉTODOS DE EXPLOTACIÓN SUBTERRÁNEA</p>
+  </header>
+
+  <main>
+    <div class="card">
+      <h2>Ingrese los datos del bloque o sector a analizar</h2>
+      <p class="small">La aplicación calcula automáticamente la <strong>ley de corte</strong> y la <strong>reserva estimada</strong>. Modifique los valores y observe los resultados dinámicos.</p>
+
+      <div class="grid">
+        <div><label>Volumen (m³)</label><input id="volumen" type="number" value="10000"></div>
+        <div><label>Densidad (t/m³)</label><input id="densidad" type="number" value="2.65"></div>
+        <div><label>Ley (%)</label><input id="ley" type="number" value="1.2"></div>
+        <div><label>Costo de Minado (USD/t)</label><input id="costoMinado" type="number" value="5"></div>
+        <div><label>Costo de Procesamiento (USD/t)</label><input id="costoProc" type="number" value="8"></div>
+        <div><label>Precio del Mineral (USD/t)</label><input id="precio" type="number" value="100"></div>
+        <div><label>Recuperación Metalúrgica (%)</label><input id="recuperacion" type="number" value="85"></div>
+      </div>
+
+      <div class="controls">
+        <button id="btnCalcular">Calcular</button>
+        <button id="btnLive" class="secondary">Modo Dinámico</button>
+      </div>
+
+      <div class="results">
+        <div class="resultBox">
+          <div class="small">Ley de Corte</div>
+          <div id="leyCorteTxt" class="big">-</div>
+          <div class="small" id="leyEstado">-</div>
+        </div>
+        <div class="resultBox">
+          <div class="small">Reserva Total</div>
+          <div id="reservaTxt" class="big">-</div>
+          <div class="small" id="reservaDetalle">-</div>
+        </div>
+        <div class="resultBox">
+          <canvas id="grafico"></canvas>
+        </div>
+      </div>
+    </div>
+    <footer>
+      © 2025 Calcuside | Desarrollado por Patrick Luna | Versión  1.0
+    </footer>
+  </main>
+
+  <script>
+    const ids = ['volumen','densidad','ley','costoMinado','costoProc','precio','recuperacion'];
+    const inputs = ids.map(id => document.getElementById(id));
+    const leyCorteTxt = document.getElementById('leyCorteTxt');
+    const reservaTxt = document.getElementById('reservaTxt');
+    const leyEstado = document.getElementById('leyEstado');
+    const reservaDetalle = document.getElementById('reservaDetalle');
+    const grafico = document.getElementById('grafico');
+    const ctx = grafico.getContext('2d');
+
+    function calcular() {
+      const v = parseFloat(volumen.value) || 0;
+      const d = parseFloat(densidad.value) || 0;
+      const ley = parseFloat(document.getElementById('ley').value) || 0;
+      const cm = parseFloat(costoMinado.value) || 0;
+      const cp = parseFloat(costoProc.value) || 0;
+      const p = parseFloat(precio.value) || 0;
+      const r = parseFloat(recuperacion.value) / 100 || 0;
+
+      const leyCorte = (cm + cp) / (p * r);
+      const reserva = v * d * (ley / 100);
+
+      leyCorteTxt.textContent = leyCorte.toFixed(4) + ' %';
+      reservaTxt.textContent = reserva.toLocaleString(undefined, {maximumFractionDigits:2}) + ' t';
+      reservaDetalle.textContent = `Volumen ${v} m³ × Densidad ${d} t/m³ × Ley ${ley}%`;
+      leyEstado.textContent = ley >= (leyCorte*100) ? 'Rentable' : 'No Rentable';
+      leyEstado.style.color = ley >= (leyCorte*100) ? 'var(--ok)' : 'var(--bad)';
+
+      drawChart(ley, leyCorte*100);
+    }
+
+    function drawChart(ley, corte) {
+      const w = grafico.width = grafico.clientWidth;
+      const h = grafico.height = 220;
+      ctx.clearRect(0,0,w,h);
+      const max = Math.max(ley, corte)*1.2;
+      const scale = h / max;
+      ctx.fillStyle = '#e3f2fd';
+      ctx.fillRect(0,0,w,h);
+      ctx.fillStyle = '#42a5f5';
+      ctx.fillRect(w*0.25, h - ley*scale, 80, ley*scale);
+      ctx.fillStyle = '#ff7043';
+      ctx.fillRect(w*0.65, h - corte*scale, 80, corte*scale);
+      ctx.fillStyle = '#333';
+      ctx.font = '14px Poppins';
+      ctx.fillText('Ley', w*0.25 + 20, h - ley*scale - 10);
+      ctx.fillText('Corte', w*0.65 + 20, h - corte*scale - 10);
+    }
+
+    document.getElementById('btnCalcular').addEventListener('click', calcular);
+
+    let modoLive = false;
+    document.getElementById('btnLive').addEventListener('click', e => {
+      modoLive = !modoLive;
+      e.target.textContent = modoLive ? 'Modo Dinámico: ON' : 'Modo Dinámico';
+      if (modoLive) inputs.forEach(i => i.addEventListener('input', calcular));
+      else inputs.forEach(i => i.removeEventListener('input', calcular));
+    });
+
+    calcular();
+  </script>
+</body>
+</html>
